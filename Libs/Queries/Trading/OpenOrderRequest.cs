@@ -1,13 +1,14 @@
 using System.Collections.Generic;
+using Tradier.Enums;
 
 namespace Tradier.Queries.Trading
 {
   public class OpenOrderRequest : BaseOrderRequest
   {
-    public string Side { get; set; }
+    public bool Preview { get; set; } = false;
     public string Symbol { get; set; }
     public string OptionSymbol { get; set; }
-    public bool Preview { get; set; } = false;
+    public OrderSideEnum? Side { get; set; }
     public List<OrderLeg> Legs { get; set; } = [];
   }
 }
