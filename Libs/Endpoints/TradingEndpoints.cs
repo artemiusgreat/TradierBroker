@@ -175,7 +175,7 @@ namespace Tradier
       {
         data.Add($"symbol[{index}]", leg.Symbol);
         data.Add($"quantity[{index}]", leg.Quantity.ToString());
-        data.Add($"type[{index}]", leg.Type);
+        data.Add($"type[{index}]", leg.Type?.ToString());
         data.Add($"option_symbol[{index}]", leg.OptionSymbol);
         data.Add($"side[{index}]", leg.Side?.ToString());
         data.Add($"price[{index}]", leg.Price?.ToString() ?? "");
@@ -215,7 +215,7 @@ namespace Tradier
       {
         data.Add($"symbol[{index}]", leg.Symbol);
         data.Add($"quantity[{index}]", leg.Quantity.ToString());
-        data.Add($"type[{index}]", leg.Type);
+        data.Add($"type[{index}]", leg.Type?.ToString());
         data.Add($"option_symbol[{index}]", leg.OptionSymbol);
         data.Add($"side[{index}]", leg.Side?.ToString());
         data.Add($"price[{index}]", leg.Price?.ToString() ?? "");
@@ -255,7 +255,7 @@ namespace Tradier
       {
         data.Add($"symbol[{index}]", leg.Symbol);
         data.Add($"quantity[{index}]", leg.Quantity.ToString());
-        data.Add($"type[{index}]", leg.Type);
+        data.Add($"type[{index}]", leg.Type?.ToString());
         data.Add($"option_symbol[{index}]", leg.OptionSymbol);
         data.Add($"side[{index}]", leg.Side?.ToString());
         data.Add($"price[{index}]", leg.Price?.ToString() ?? "");

@@ -9,6 +9,6 @@ namespace Tradier.Queries.Trading
     public string Symbol { get; set; }
     public string OptionSymbol { get; set; }
     public OrderSideEnum? Side { get; set; }
-    public List<OrderLeg> Legs { get; set; } = [];
+    public List<OpenOrderRequest> Legs { get; set; } = [];
   }
 }
