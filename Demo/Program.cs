@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -39,7 +38,7 @@ namespace Demo
 
       // Option order
 
-      var optionOrder = new GroupOrderRequest
+      var optionOrder = new OpenOrderRequest
       {
         Price = 0.05,
         AccountNumber = account,

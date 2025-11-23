@@ -16,7 +16,7 @@ namespace Tradier
     /// </summary>
     /// <param name="request">Option order request parameters</param>
     /// <param name="cleaner"></param>
-    public virtual async Task<OrderResponseMessage> SendOptionOrder(OptionOrderRequest request, CancellationToken? cleaner = default)
+    public virtual async Task<OrderResponseMessage> SendOptionOrder(OpenOrderRequest request, CancellationToken? cleaner = default)
     {
       var data = new Dictionary<string, string>
       {
@@ -25,8 +25,8 @@ namespace Tradier
         { "option_symbol", request.OptionSymbol },
         { "side", request.Side },
         { "quantity", request.Quantity.ToString() },
-        { "type", request.Type },
-        { "duration", request.Duration ?? "day" },
+        { "type", request.Type?.ToString() },
+        { "duration", request.Duration?.ToString() ?? "day" },
         { "price", request.Price?.ToString() },
         { "stop", request.Stop?.ToString() },
         { "preview", request.Preview.ToString() }
@@ -49,7 +49,7 @@ namespace Tradier
     /// </summary>
     /// <param name="request">Group order request parameters</param>
     /// <param name="cleaner"></param>
-    public virtual async Task<OrderResponseMessage> SendGroupOrder(GroupOrderRequest request, CancellationToken? cleaner = default)
+    public virtual async Task<OrderResponseMessage> SendGroupOrder(OpenOrderRequest request, CancellationToken? cleaner = default)
     {
       var data = new Dictionary<string, string>
       {
@@ -88,7 +88,7 @@ namespace Tradier
     /// </summary>
     /// <param name="request">Equity order request parameters</param>
     /// <param name="cleaner"></param>
-    public virtual async Task<OrderResponseMessage> SendEquityOrder(EquityOrderRequest request, CancellationToken? cleaner = default)
+    public virtual async Task<OrderResponseMessage> SendEquityOrder(OpenOrderRequest request, CancellationToken? cleaner = default)
     {
       var data = new Dictionary<string, string>
       {
@@ -97,8 +97,8 @@ namespace Tradier
         { "symbol", request.Symbol },
         { "side", request.Side },
         { "quantity", request.Quantity.ToString()},
-        { "type", request.Type },
-        { "duration", request.Duration ?? "day" },
+        { "type", request.Type?.ToString() },
+        { "duration", request.Duration?.ToString() ?? "day" },
         { "price", request.Price?.ToString() },
         { "stop", request.Stop?.ToString() },
         { "preview", request.Preview.ToString() }
@@ -121,14 +121,14 @@ namespace Tradier
     /// </summary>
     /// <param name="request">Combo order request parameters</param>
     /// <param name="cleaner"></param>
-    public virtual async Task<OrderResponseMessage> SendComboOrder(ComboOrderRequest request, CancellationToken? cleaner = default)
+    public virtual async Task<OrderResponseMessage> SendComboOrder(OpenOrderRequest request, CancellationToken? cleaner = default)
     {
       var data = new Dictionary<string, string>
       {
         { "class", "combo" },
         { "symbol", request.Symbol },
-        { "type", request.Type },
-        { "duration", request.Duration ?? "day" },
+        { "type", request.Type?.ToString() },
+        { "duration", request.Duration?.ToString() ?? "day" },
         { "price", request.Price?.ToString() },
         { "preview", request.Preview.ToString() }
       };
@@ -160,12 +160,12 @@ namespace Tradier
     /// </summary>
     /// <param name="request">OTO order request parameters</param>
     /// <param name="cleaner"></param>
-    public virtual async Task<OrderResponseMessage> SendOtoOrder(OtoOrderRequest request, CancellationToken? cleaner = default)
+    public virtual async Task<OrderResponseMessage> SendOtoOrder(OpenOrderRequest request, CancellationToken? cleaner = default)
     {
       var data = new Dictionary<string, string>
       {
         { "class", "oto" },
-        { "duration", request.Duration ?? "day" },
+        { "duration", request.Duration?.ToString() ?? "day" },
         { "preview", request.Preview.ToString() }
       };
 
@@ -177,7 +177,7 @@ namespace Tradier
         data.Add($"quantity[{index}]", leg.Quantity.ToString());
         data.Add($"type[{index}]", leg.Type);
         data.Add($"option_symbol[{index}]", leg.OptionSymbol);
-        data.Add($"side[{index}]", leg.Side);
+        data.Add($"side[{index}]", leg.Side?.ToString());
         data.Add($"price[{index}]", leg.Price?.ToString() ?? "");
         data.Add($"stop[{index}]", leg.Stop?.ToString() ?? "");
         index++;
@@ -200,12 +200,12 @@ namespace Tradier
     /// </summary>
     /// <param name="request">OCO order request parameters</param>
     /// <param name="cleaner"></param>
-    public virtual async Task<OrderResponseMessage> SendOcoOrder(OcoOrderRequest request, CancellationToken? cleaner = default)
+    public virtual async Task<OrderResponseMessage> SendOcoOrder(OpenOrderRequest request, CancellationToken? cleaner = default)
     {
       var data = new Dictionary<string, string>
       {
         { "class", "oco" },
-        { "duration", request.Duration ?? "day" },
+        { "duration", request.Duration?.ToString() ?? "day" },
         { "preview", request.Preview.ToString() }
       };
 
@@ -217,7 +217,7 @@ namespace Tradier
         data.Add($"quantity[{index}]", leg.Quantity.ToString());
         data.Add($"type[{index}]", leg.Type);
         data.Add($"option_symbol[{index}]", leg.OptionSymbol);
-        data.Add($"side[{index}]", leg.Side);
+        data.Add($"side[{index}]", leg.Side?.ToString());
         data.Add($"price[{index}]", leg.Price?.ToString() ?? "");
         data.Add($"stop[{index}]", leg.Stop?.ToString() ?? "");
         index++;
@@ -240,12 +240,12 @@ namespace Tradier
     /// </summary>
     /// <param name="request">OTOCO order request parameters</param>
     /// <param name="cleaner"></param>
-    public virtual async Task<OrderResponseMessage> SendOtocoOrder(OtocoOrderRequest request, CancellationToken? cleaner = default)
+    public virtual async Task<OrderResponseMessage> SendOtocoOrder(OpenOrderRequest request, CancellationToken? cleaner = default)
     {
       var data = new Dictionary<string, string>
       {
         { "class", "otoco" },
-        { "duration", request.Duration ?? "day" },
+        { "duration", request.Duration?.ToString() ?? "day" },
         { "preview", request.Preview.ToString() }
       };
 
@@ -257,7 +257,7 @@ namespace Tradier
         data.Add($"quantity[{index}]", leg.Quantity.ToString());
         data.Add($"type[{index}]", leg.Type);
         data.Add($"option_symbol[{index}]", leg.OptionSymbol);
-        data.Add($"side[{index}]", leg.Side);
+        data.Add($"side[{index}]", leg.Side?.ToString());
         data.Add($"price[{index}]", leg.Price?.ToString() ?? "");
         data.Add($"stop[{index}]", leg.Stop?.ToString() ?? "");
         index++;
@@ -280,12 +280,12 @@ namespace Tradier
     /// </summary>
     /// <param name="request">Update order request parameters</param>
     /// <param name="cleaner"></param>
-    public virtual async Task<OrderResponseMessage> UpdateOrder(UpdateOrderRequest request, CancellationToken? cleaner = default)
+    public virtual async Task<OrderResponseMessage> UpdateOrder(BaseOrderRequest request, CancellationToken? cleaner = default)
     {
       var data = new Dictionary<string, string>
       {
-        { "type", request.Type },
-        { "duration", request.Duration ?? "day" },
+        { "type", request.Type?.ToString() },
+        { "duration", request.Duration?.ToString() ?? "day" },
         { "price", request.Price?.ToString() ?? "" },
         { "stop", request.Stop?.ToString() ?? "" },
       };
@@ -307,7 +307,7 @@ namespace Tradier
     /// </summary>
     /// <param name="request">Cancel order request parameters</param>
     /// <param name="cleaner"></param>
-    public virtual async Task<OrderResponseMessage> ClearOrder(CancelOrderRequest request, CancellationToken? cleaner = default)
+    public virtual async Task<OrderResponseMessage> ClearOrder(BaseOrderRequest request, CancellationToken? cleaner = default)
     {
       var query = new Query()
       {
