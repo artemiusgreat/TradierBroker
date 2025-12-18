@@ -9,7 +9,6 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
-using Tradier.Messages;
 using Tradier.Messages.Account;
 using Tradier.Messages.Stream;
 using Tradier.Queries;
@@ -83,6 +82,11 @@ namespace Tradier
     /// Order notification
     /// </summary>
     public virtual Action<OrderMessage> OnOrder { get; set; } = o => { };
+
+    /// <summary>
+    /// Error notification
+    /// </summary>
+    public virtual Action<Exception> OnError { get; set; } = o => { };
 
     /// <summary>
     /// Constructor
@@ -216,8 +220,8 @@ namespace Tradier
     /// </summary>
     /// <param name="streamer"></param>
     /// <param name="data"></param>
-    /// <param name="cancellation"></param>
-    protected virtual Task SendStream(ClientWebSocket streamer, object data, CancellationTokenSource cancellation = null)
+    /// <param name="cleaner"></param>
+    protected virtual Task SendStream(ClientWebSocket streamer, object data, CancellationTokenSource cleaner = null)
     {
       var content = JsonSerializer.Serialize(data, mapper.Options);
       var message = Encoding.UTF8.GetBytes(content);
@@ -226,7 +230,7 @@ namespace Tradier
         message,
         WebSocketMessageType.Text,
         true,
-        cancellation?.Token ?? CancellationToken.None);
+        cleaner?.Token ?? CancellationToken.None);
     }
 
     /// <summary>
@@ -234,23 +238,29 @@ namespace Tradier
     /// </summary>
     /// <param name="uri"></param>
     /// <param name="streamer"></param>
-    /// <param name="scheduler"></param>
     /// <param name="action"></param>
-    protected virtual async Task CreateConnection(string uri, ClientWebSocket streamer, Action<JsonNode> action)
+    protected virtual async Task CreateConnection(string uri, ClientWebSocket streamer, Action<JsonNode> action, CancellationTokenSource cleaner = null)
     {
       var data = new byte[short.MaxValue];
       var source = new UriBuilder($"{StreamUri}{uri}");
-      var cancellation = new CancellationTokenSource();
 
-      await streamer.ConnectAsync(source.Uri, cancellation.Token);
+      await streamer.ConnectAsync(source.Uri, cleaner.Token);
 
-      var process = new Thread(async o => 
+      var process = new Thread(async o =>
       {
         while (streamer.State is WebSocketState.Open)
         {
-            var streamResponse = await streamer.ReceiveAsync(new ArraySegment<byte>(data), cancellation.Token);
+          try
+          {
+            var streamResponse = await streamer.ReceiveAsync(new ArraySegment<byte>(data), cleaner.Token);
             var content = Encoding.UTF8.GetString(data, 0, streamResponse.Count);
+
             action(JsonNode.Parse(content));
+          }
+          catch (Exception e)
+          {
+            OnError(e);
+          }
         }
       });
 
